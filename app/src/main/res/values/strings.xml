@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">lab_5</string>
+    <string name="button">World!</string>
+    <string name="hello">Hello</string>
+    <string name="string">Hell</string>
+    <string name="to_second">to second</string>
+    <string name="to_first">to first</string>
+    <string name="to_third">to third</string>
+
+</resources>
