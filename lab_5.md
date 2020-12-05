@@ -252,7 +252,6 @@ class EspressoTest {
         onView(withId(R.id.butToThird)).perform(click())
         pressBack()
         pressBack()
-        firstActivityExist()
         pressBackUnconditionally()
             Assert.assertTrue(
                     scenario.state == Lifecycle.State.DESTROYED
