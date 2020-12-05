@@ -118,6 +118,9 @@ class MainActivityTest {
 
     @Test
     fun orientationTest(){
+    activityRule.scenario.onActivity { activity ->
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
         onView(withId(R.id.editText)).perform(typeText("Hello"), closeSoftKeyboard())
         onView(withId(R.id.button)).perform(click())
         onView(withId(R.id.button)).check(matches(withText("Hell")))
@@ -234,26 +237,26 @@ class EspressoTest {
 ```
 И проверяется backStack: при нажатии кнопки "Назад" мы должны вернуться в определенную Activity.
 ```
-@Test
-    fun backToFirstFromSecond() {
+ @Test
+    fun backstackDepth() {
+        ActivityScenario.launch(FirstActivity::class.java).use { scenario ->
         firstToSecond()
+        onView(withId(R.id.butToThird)).perform(click())
+        onView(withId(R.id.butToSecFromThird)).perform(click())
+        onView(withId(R.id.butToFirst)).perform(click())
+        onView(withId(R.id.butToSecond)).perform(click())
+        onView(withId(R.id.butToThird)).perform(click())
         pressBack()
-        firstActivityExist()
-    }
-
-    @Test
-    fun backToSecondFromThird() {
-        secondToThird()
-        pressBack()
-        secondActivityExist()
-    }
-
-    @Test
-    fun backToFirstFromThird() {
-        secondToThird()
+        onView(withId(R.id.butToFirst)).perform(click())
+        onView(withId(R.id.butToSecond)).perform(click())
+        onView(withId(R.id.butToThird)).perform(click())
         pressBack()
         pressBack()
-        firstActivityExist()
+        pressBackUnconditionally()
+            Assert.assertTrue(
+                    scenario.state == Lifecycle.State.DESTROYED
+            )
+        }
     }
 }
 ```
