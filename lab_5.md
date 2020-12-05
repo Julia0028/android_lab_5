@@ -238,8 +238,8 @@ class EspressoTest {
 И проверяется backStack: при нажатии кнопки "Назад" мы должны вернуться в определенную Activity.
 ```
  @Test
-    fun backstackDepth() {
-        ActivityScenario.launch(FirstActivity::class.java).use { scenario ->
+    fun testBackstackDepth() {
+        ActivityScenario.launch(FirstActivity::class.java).use {
         firstToSecond()
         onView(withId(R.id.butToThird)).perform(click())
         onView(withId(R.id.butToSecFromThird)).perform(click())
@@ -254,7 +254,7 @@ class EspressoTest {
         pressBack()
         pressBackUnconditionally()
             Assert.assertTrue(
-                    scenario.state == Lifecycle.State.DESTROYED
+                    it.state == Lifecycle.State.DESTROYED
             )
         }
     }
