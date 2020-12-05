@@ -17,11 +17,16 @@ class MainActivityTest {
 
     @Test
     fun orientationTest(){
+
+        activityRule.scenario.onActivity { activity ->
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
         onView(withId(R.id.editText)).perform(typeText("Hello"), closeSoftKeyboard())
         onView(withId(R.id.button)).perform(click())
         onView(withId(R.id.button)).check(matches(withText("Hell")))
 
         onView(withId(R.id.editText)).check(matches(withText("Hello")))
+
 
         activityRule.scenario.onActivity {
            it.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE

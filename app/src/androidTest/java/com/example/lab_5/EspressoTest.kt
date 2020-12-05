@@ -1,5 +1,9 @@
 package com.example.lab_5
 
+import android.content.Intent
+import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -7,6 +11,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 
@@ -31,8 +36,8 @@ class EspressoTest {
     }
 
     private fun thirdActivityExist() {
-       onView(withId(R.id.butToFirstFromThird)).check(matches(isDisplayed()))
-       onView(withId(R.id.butToSecFromThird)).check(matches(isDisplayed()))
+        onView(withId(R.id.butToFirstFromThird)).check(matches(isDisplayed()))
+        onView(withId(R.id.butToSecFromThird)).check(matches(isDisplayed()))
         onView(withId(R.id.butToFirst)).check(doesNotExist())
         onView(withId(R.id.butToThird)).check(doesNotExist())
         onView(withId(R.id.butToSecond)).check(doesNotExist())
@@ -85,24 +90,25 @@ class EspressoTest {
     }
 
     @Test
-    fun backToFirstFromSecond() {
+    fun backstackDepth() {
+        ActivityScenario.launch(FirstActivity::class.java).use { scenario ->
         firstToSecond()
+        onView(withId(R.id.butToThird)).perform(click())
+        onView(withId(R.id.butToSecFromThird)).perform(click())
+        onView(withId(R.id.butToFirst)).perform(click())
+        onView(withId(R.id.butToSecond)).perform(click())
+        onView(withId(R.id.butToThird)).perform(click())
         pressBack()
-        firstActivityExist()
-    }
-
-    @Test
-    fun backToSecondFromThird() {
-        secondToThird()
-        pressBack()
-        secondActivityExist()
-    }
-
-    @Test
-    fun backToFirstFromThird() {
-        secondToThird()
+        onView(withId(R.id.butToFirst)).perform(click())
+        onView(withId(R.id.butToSecond)).perform(click())
+        onView(withId(R.id.butToThird)).perform(click())
         pressBack()
         pressBack()
         firstActivityExist()
+        pressBackUnconditionally()
+            Assert.assertTrue(
+                    scenario.state == Lifecycle.State.DESTROYED
+            )
+        }
     }
 }
