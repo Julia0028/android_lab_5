@@ -90,7 +90,7 @@ class EspressoTest {
     }
 
     @Test
-    fun backstackDepth() {
+    fun testBackstackDepth() {
         ActivityScenario.launch(FirstActivity::class.java).use { scenario ->
         firstToSecond()
         onView(withId(R.id.butToThird)).perform(click())
@@ -104,7 +104,6 @@ class EspressoTest {
         onView(withId(R.id.butToThird)).perform(click())
         pressBack()
         pressBack()
-        firstActivityExist()
         pressBackUnconditionally()
             Assert.assertTrue(
                     scenario.state == Lifecycle.State.DESTROYED
